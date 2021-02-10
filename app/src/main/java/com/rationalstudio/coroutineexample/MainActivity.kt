@@ -12,20 +12,25 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        GlobalScope.launch(Dispatchers.IO) {
-            val result = anotherFunction()
-            Log.d(TAG,"This thread is ${Thread.currentThread().name}")
-            withContext(Dispatchers.Main){
-                Log.d(TAG,"This thread is ${Thread.currentThread().name}")
-                mytx.text = result
+        Log.d(TAG,"Before runBlocking")
+        runBlocking {
+            launch(Dispatchers.IO) {
+                delay(2000)
+                Log.d(TAG,"Finished First Coroutine")
             }
+            launch(Dispatchers.IO) {
+                delay(2000)
+                Log.d(TAG,"Finished Second Coroutine")
+            }
+            delay(5000)
+            Log.d(TAG,"Finished runBlocking")
+
         }
+        Log.d(TAG,"After runBlocking")
+
     }
 
-    suspend fun anotherFunction():String{
-        delay(3000)
-        return "Result"
-    }
+
 
 
 
